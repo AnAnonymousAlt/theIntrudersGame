@@ -19,11 +19,17 @@
       var canvasWidth = 480;
       var canvasHeight = 270;
       var myGamePiece1; // myGP1
+      var others;
       var myGamePieceBackground; // myGPBgd
+      socket.on('new user', function(msg){
+        myGamePiece = msg.myself;
+        
+      });
       // inital component and start myGameArea (canvas)
       function startGame() {
         myGameArea.start();
-        myGamePiece1 = new component(30,30,"red",10,120);
+        var tmpSelf = new component(30,30,"red",10,120);
+        socket.emit("new user", tmpSelf);
         myGamePieceBackground = new component(300,220,"grey",130,50);
       }
       // main object

@@ -3,6 +3,8 @@ app2.js
   open express
   open socket.io
   have an array to store every user.
+  get request msg
+  send back accept msg
   get new user msg
   store to array
   send new user msg to all
@@ -13,6 +15,8 @@ app2.js
 
 index.html
   canvas html
+  send request msg
+  get accept msg and number
   send new user msg
   get new user msg
   inital user itself
