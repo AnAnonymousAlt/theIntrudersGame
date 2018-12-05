@@ -1,0 +1,6 @@
+/log
+/stats
+/cgi-bin/test-env
+/cgi-bin/hello.so
+/cgi-bin/jj
+/cgi-bin/finger

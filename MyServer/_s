@@ -1,0 +1,216 @@
+#include "tools.hh"
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <string.h>
+char * headerMaker (TargetType target_type) {
+  std::string header =
+    "HTTP/1.1 200 Document follows\r\n"
+    "Server: CS 252 lab5\r\n"
+    "Content-type: ";
+  switch (target_type) {
+    case IMG_T:
+      header = header + "image/gif\r\n\r\n";
+      break;
+    case HTM_T:
+      header = header + "text/html\r\n\r\n";
+      break;
+    default:
+      header = header + "text/plain\r\n\r\n";
+  }
+  char * r = strdup(header.c_str());
+  return r;
+}
+/*
+   const char * requestReader (int socket) {
+   char * s = new char[1];
+   char * ending = new char[3];
+   std::string request;
+   while (read(socket, s, 1)) {
+   if(s[0] == '\000') break;
+   request.push_back(s[0]);
+   if (ending[0] == '\r' && ending[1] == '\n' && ending[2] == '\r' && s[0] == '\n') {
+   break;
+   }
+   else {
+   ending[0] = ending[1];
+   ending[1] = ending[2];
+   ending[2] = s[0];
+   }
+   }
+   delete s;
+   delete ending;
+   return request.c_str();
+   }
+   bool modJudger(const char * request_s) {
+   std::string request(request_s);
+   return request.find(".so?") != std::string::npos;
+   }
+
+   bool dofJudger(const char * request_s) {
+   std::string request(request_s);
+//  printf("before dof = %s\n", request.c_str());
+size_t space_pos = request.find(" ");
+request.erase(request.begin() + space_pos, request.end());
+//printf("in dofJ %s\n", request.c_str());
+bool hasQ = request.find("/?") != std::string::npos;
+
+if (request.size() == 1) return false;
+if (request.at(request.size()-1) == '/') return true;
+if (hasQ) return true;
+else {
+size_t Q_pos = request.find("?");
+if (Q_pos != std::string::npos) {
+request.insert(Q_pos, "/");
+return true;
+}
+
+}
+// if it is in icons/, it is a file
+if (request.find("icons") != std::string::npos) return false;
+// To make both dir/ or dir working, use stat to check file
+struct stat sb;
+std::string tmp = "http-root-dir/htdocs" + request;
+if (stat(tmp.c_str(), &sb)) {
+//printf("std::string tmp = %s\n", tmp.c_str());
+return false;
+}
+if (S_ISDIR(sb.st_mode)) {
+return true;
+}
+return false;
+}
+
+void envWriter(const char * request_s) {
+std::string request(request_s);
+std::string requestType = request.substr(0, request.find(" "));
+request.erase(0, request.find(" ") + 1);
+std::string query = "";
+std::string pathInfo = request.substr(0, request.find(" "));
+if (pathInfo.find("?") != std::string::npos) {
+query = pathInfo.substr(pathInfo.find("?")+1);
+pathInfo.erase(pathInfo.begin() + pathInfo.find("?"), pathInfo.end());
+}
+std::string pathTranslated = "http-root-dir/" + pathInfo;
+std::string scriptName = "";
+if (pathInfo.find("cgi-bin/") != std::string::npos) {
+  scriptName =
+    pathInfo.substr(
+        pathInfo.find("cgi-bin/")
+        + std::string("cgi-bin/").size(), std::string::npos);
+}
+request.erase(0, request.find(" ") + 1);
+std::string HTTPAccept = request.substr(0, request.find("\n"));
+request.erase(0, request.find("\n") + 1);
+std::string host = request.substr(0, request.find("\n"));
+host.erase(0, std::string("Host: ").size());
+request.erase(0, request.find("\n") + 1);
+std::string user = request.substr(0, request.find("\n"));
+request.erase(0, request.find("\n") + 1);
+user.erase(0, std::string("User-Agent: ").size());
+request.erase(0, request.find(" ") + 1);
+std::string contentType = request.substr(0, request.find(","));
+
+if (query != "")
+setenv((const char*)"QUERY_STRING", query.c_str(), 1);
+setenv((const char*)"SERVER_SOFTWARE", (const char*)"SERVER_SOFTWARE",1);
+setenv((const char*)"SERVER_NAME", (const char*)"SERVER_NAME", 1);
+setenv((const char*)"GATEWAY_INTERFACE", (const char*)"GATEWAY_INTERFACE", 1);
+setenv((const char*)"SERVER_PROTOCOL", (const char*)"SERVER_PROTCOL", 1);
+setenv((const char*)"SERVER_PORT", std::to_string(port).c_str(), 1);
+setenv((const char*)"REQUEST_METHOD", requestType.c_str(), 1);
+setenv((const char*)"HTTP_ACCEPT", HTTPAccept.c_str(), 1);
+setenv((const char*)"PATH_INFO", pathInfo.c_str(), 1);
+setenv((const char*)"PATH_TRANSLATED", pathTranslated.c_str(), 1);
+setenv((const char*)"SCRIPT_NAME", scriptName.c_str(), 1);
+setenv((const char*)"REMOTE_HOST", host.c_str(), 1);
+setenv((const char*)"REMOTE_ADDR", (const char*)"REMOTE_ADDR", 1);
+setenv((const char*)"REMOTE_USER", (const char*)"REMOTE_USER", 1);
+setenv((const char*)"AUTH_TYPE", (const char*)"AUTH_TYPE", 1);
+setenv((const char*)"CONTENT_TYPE", contentType.c_str(), 1);
+setenv((const char*)"CONTENT_LENGTH", (const char*)"CONTENT_LENGTH", 1);
+}
+
+bool cgiJudge(const char * request_s) {
+  std::string request(request_s);
+  return request.find("cgi-bin/") != std::string::npos;
+}
+
+bool newModChecker(const char * mod_s) {
+  std::string mod(mod_s);
+  for(std::vector<std::string>::iterator it = module_list.begin(); it < module_list.end(); ++it) {
+    if (mod == *it) return false;
+  }
+  return false;
+}
+*/
+char * fileReader(char * file, TargetType target_type) {
+  std::string content;
+  if (target_type != IMG_T) {
+    std::ifstream ifs(file);
+    std::string line;
+    if (ifs.is_open()) {
+      while(getline(ifs, line)) {
+        content = content + line;
+        content = content +  "\n";
+      }
+    }
+    ifs.close();
+    char * r = strdup(content.c_str());
+    return r;
+  }
+  else {
+    std::ifstream ifs(file, std::ios::in|std::ios::binary|std::ios::ate);
+    std::streampos size = ifs.tellg();
+    ifs.seekg(0, std::ios::beg);
+    char * image = (char*)malloc(size);
+    ifs.read(image, size);
+    ifs.close();
+    return image;
+  }
+}
+
+/*
+//return file string
+const char * fileNameParser(const char * request_s) {
+std::string request(request_s);
+int i = 1;
+if (request.size() == 1) {
+return "http-root-dir/htdocs/index.html";
+}
+while ( i != request.size() && request.at(i) != '/') {
+i++;
+}
+if (i < request.size()) {
+// has parent dir
+std::string icons("icons");
+if (icons.compare(request.substr(1, i-1)) == 0) {
+std::string ts("http-root-dir");
+request = ts + request;
+return request;
+}
+}
+std::string ts("http-root-dir/htdocs");
+request = ts + request;
+return request;
+}
+
+const char * URLParser(const char * request_s) {
+std::string request_URL(request_s);
+request_URL.erase(0, request_URL.find("Referer") + std::string("Referer: ").size());
+request_URL.erase(request_URL.find("\r\n"), std::string::npos)
+return request_URL.c_str();
+}
+
+void logWriter(const char * request_s) {
+std::string request(request_s);
+FILE * fp = fopen(logfile, "a");
+fprintf(fp, source_host);
+size_t dir_1 = request.find(" ");
+std::string dir_r = request.substr(dir_1 + 1, std::string::npos);
+dir_1 = dir_r.find(" ");
+dir_r.erase(dir_1, std::string::npos);
+fprintf(fp, dir_r.c_str());
+fprintf(fp, (const char*)"\n");
+fclose(fp);
+}*/

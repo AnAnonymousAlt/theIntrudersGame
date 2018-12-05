@@ -1,0 +1,7 @@
+BUGs:
+FIXED   browsing dir or dir/ 
+TODO    CGI-BIN partially works ?? execv parameter 22
+TODO    MODULES
+TODO    CGI-BIN extra points
+TODO    STATISTICS and LOG pages
+TODO    SECURITY
