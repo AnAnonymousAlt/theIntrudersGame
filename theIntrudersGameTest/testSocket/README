@@ -1,0 +1,24 @@
+app2.js
+  open http
+  open express
+  open socket.io
+  have an array to store every user.
+  get new user msg
+  store to array
+  send new user msg to all
+  get update msg
+  wait all msg from every user
+  send update msg
+
+
+index.html
+  canvas html
+  send new user msg
+  get new user msg
+  inital user itself
+  get other user 
+  update other user
+  send pos to server every .. interval
+  get update
+  update pos
+
