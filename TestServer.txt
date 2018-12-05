@@ -1,0 +1,4 @@
+ID: i-0f06574bc7a644358
+public dns: ec2-18-224-181-161.us-east-2.compute.amazonaws.com
+private key: ./aws1.pwm
+user name: ec2-user
