@@ -3,9 +3,14 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "aws-sdk": "latest"  
+    "aws-sdk": "latest",
+    "express": "^4.15.2",
+    "socket.io": "^2.2.0"
   },
   "scripts": {
     "start": "node app.js"
-  }
+  },
+  "main": "app.js",
+  "author": "",
+  "license": "ISC"
 }
