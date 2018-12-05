@@ -155,6 +155,8 @@
       function updateGameArea() {
         // Clear then update
         myGameArea.clear();
+        var oldx = myGamePiece1.x;
+        var oldy = myGamePiece1.y;
         // Make piece move. 1 px / 20 millisecond towards right
         // myGamePiece1.x+=1;
         // Key sroke
@@ -207,10 +209,14 @@
         // update
         myGamePieceBackground.update();
         myGamePiece1.newPos();
-        //myGamePiece1.update();
+        var newx = myGamePiece1.x;
+        var newy = myGamePiece1.y;
+        myGamePiece1.x = oldx;
+        myGamePiece1.y = oldy;
+        myGamePiece1.update();
         
         var m = {
-          'x': myGamePiece1.x, 'y': myGamePiece1.y
+          'x': newx, 'y': newy
         } 
         socket.emit('update', m);
       }
