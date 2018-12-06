@@ -32,7 +32,7 @@ button:hover {
 rgsbtn {
   background-color: #f44336;
   color: white; 
-  padding: 10px 135px;
+  padding: 14px 100px;
   margin: 8px 0;
   border: none;
   cursor: pointer;
@@ -69,21 +69,52 @@ span.psw {
 </style>
 </head>
 <body>
-
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script>
+    var socket = io();
+  </script>
+  <script>
+    function clicklogin(){
+      var loginmsg = {
+	'username': document.getElementById("uname").value, 'password': document.getElementById("psw").value
+      }
+      socket.emit("login", loginmsg);
+      window.
+      socket.on("aok", function(){
+	window.open("welcome.html","_self");
+      });
+      socket.on("abad", function(){
+	alert("Rewrite!");
+      });
+    }
+    function clickregister(){
+    var registermsg = {
+            'username': document.getElementById("uname").value, 'password': document.getElementById("psw").value
+	          }
+      socket.emit("register", registermsg);
+      socket.on("aok",function(){
+	window.open("welcome.html","_self");
+      });
+      socket.on("abad",function(){
+	alert("Rewrite!");
+      });
+    }
+  </script>
 <h2>Login Form</h2>
 
   <div class="container">
     <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uname" required>
+    <input type="text" placeholder="Enter Username"id="uname" name="uname" required>
 
     <br><label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
+    <input type="password" placeholder="Enter Password" id="psw" name="psw" required>
         
-    <br> <button type="button"onclick="window.location.href='welcome.html'">Login</button>
+    <br> <button type="button"onclick="clicklogin()">Login</button>
     <label>
       <input type="checkbox" checked="checked" name="remember"> Remember me
     </label>
-    <br ><rgsbtn type="button"onclick="window.location.href='welcome.html'">Register</rgsbtn>
+    <br ><rgsbtn type="button"onclick="clickregister()">Register</rgsbtn>
     
   </div>
 
