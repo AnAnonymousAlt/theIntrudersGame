@@ -2,6 +2,8 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var tt = require('./table');
+
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/login.html');
 });
@@ -31,6 +33,10 @@ var counter = -1;
 var array = [];
 var uc = []; // update counter
 var ucc = -1;
+
+tt.adda("li@p.c", "asdf", "haha");
+
+
 io.sockets.on('connection', function(socket) {
   console.log('An user connected.');
 
