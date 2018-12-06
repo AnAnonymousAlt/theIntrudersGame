@@ -28,6 +28,7 @@ var flag = 0;
 var x = 120;
 player2.src = "player2.jpeg";
 function drawboss(){
+  ctx.clearRect(0, 0, 700, 500);
   var prevx = x;
   if(flag == 0){
     x += 2;
@@ -43,7 +44,6 @@ function drawboss(){
   }
   var boss = new Image();
   boss.onload = function(){
-    ctx.drawImage(boss, prevx, 220, 0, 0);
     ctx.drawImage(boss, x, 220, 50, 50);
   }
   boss.src = "boss.jpeg";
