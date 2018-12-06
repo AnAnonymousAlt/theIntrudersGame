@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas id="myCanvas" width="700" height="500" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<script>
+var flag = 0;
+var x = 120;
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+
+function drawboss(){
+  var img = new Image();
+  img.onload = function(){
+    ctx.drawImage(img, 5, 5, 480, 450);
+  }
+  img.src = "background.jpeg";
+/*
+  var player1 = new Image();
+  player1.onload = function(){
+    ctx.drawImage(player1, 480, 350, 50, 50);
+  }
+  player1.src = "player1.jpeg";
+  
+  var player2 = new Image();
+  player2.onload = function(){
+    ctx.drawImage(player2, 600, 350, 50, 50);
+  }
+  player2.src = "player2.jpeg";
+  var prevx = x;
+*/  
+  if(flag == 0){
+    x += 2;
+  }
+  else{
+    x -= 2;
+  }
+  if(x > 325){
+    flag = 1;
+  }
+  else if(x < 120){
+    flag = 0;
+  }
+  
+  var boss = new Image();
+  boss.onload = function(){
+    ctx.drawImage(boss, x, 220, 50, 50);
+  }
+  boss.src = "boss.jpeg";
+}
+setInterval(drawboss, 20);
+</script>
+
+<p><strong>Note:</strong> The canvas tag is not supported in Internet 
+Explorer 8 and earlier versions.</p >
+
+</body>
+</html>
