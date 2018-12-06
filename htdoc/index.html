@@ -24,13 +24,29 @@ var player2 = new Image();
 player2.onload = function(){
         ctx.drawImage(player2, 600, 350, 50, 50);
 }
+var flag = 0;
+var x = 120;
 player2.src = "player2.jpeg";
-var boss = new Image();
-boss.onload = function(){
-        ctx.drawImage(boss, 120, 220, 50, 50);
+function drawboss(){
+  if(flag == 0){
+    x += 2;
+  }
+  else{
+    x -= 2;
+  }
+  if(x > 325){
+    flag = 1;
+  }
+  else if(x < 120){
+    flag = 0;
+  }
+  var boss = new Image();
+  boss.onload = function(){
+    ctx.drawImage(boss, x, 220, 50, 50);
+  }
+  boss.src = "boss.jpeg";
 }
-boss.src = "boss.jpeg";
-
+setInterval(drawboss, 20);
 </script>
 
 <p><strong>Note:</strong> The canvas tag is not supported in Internet 
