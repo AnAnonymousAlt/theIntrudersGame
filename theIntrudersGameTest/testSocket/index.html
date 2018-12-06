@@ -19,18 +19,24 @@
       var canvasWidth = 480;
       var canvasHeight = 270;
       var myGamePiece1; // myGP1
-      var others;
       var myGamePieceBackground; // myGPBgd
-      socket.on('new user', function(msg){
-        myGamePiece = msg.myself;
-        
+      var getPermission = 0;
+      var myid = -1;
+
+      /*
+      socket.on('new_user', function(msg) {
+      });
+      */
+      socket.on('accept', function(msg) {
+        myid = msg;
       });
       // inital component and start myGameArea (canvas)
       function startGame() {
         myGameArea.start();
-        var tmpSelf = new component(30,30,"red",10,120);
-        socket.emit("new user", tmpSelf);
-        myGamePieceBackground = new component(300,220,"grey",130,50);
+	myGamePiece1 = new component(30,30,"red",10,120);
+	socket.emit("request", myGamePiece1);
+	// myGamePiece1 = new component(30,30,"red",10,120);
+	myGamePieceBackground = new component(300,220,"grey",130,50);
       }
       // main object
       var myGameArea = {
@@ -68,7 +74,7 @@
           ctx.fillRect(this.x, this.y, this.width, this.height);
         }
         this.newPos = function() {
-          // BUG: check the situation that x + width + speed > border, x + width = border
+          // (FIXED) BUG: check the situation that x + width + speed > border, x + width = border
           if (this.speedX > 0) {
             // if it is not at the border
             if (this.x + this.width < canvasWidth) {
@@ -158,9 +164,14 @@
       var ts = 0.5; // turn round speed
       var sl = 3; // speed limit
       var av = 0.3; // accelerated speed
+
+
+
+
       function updateGameArea() {
+	if (myid == -1) return;
         // Clear then update
-        myGameArea.clear();
+        //myGameArea.clear();
         var oldx = myGamePiece1.x;
         var oldy = myGamePiece1.y;
         // Make piece move. 1 px / 20 millisecond towards right
@@ -213,23 +224,34 @@
         }
 
         // update
-        myGamePieceBackground.update();
+        // myGamePieceBackground.update();
         myGamePiece1.newPos();
         var newx = myGamePiece1.x;
         var newy = myGamePiece1.y;
+	/*
         myGamePiece1.x = oldx;
         myGamePiece1.y = oldy;
-        myGamePiece1.update();
+	*/
+        //myGamePiece1.update();
         
-        var m = {
-          'x': newx, 'y': newy
+        var emit_message = {
+          'x': newx, 'y': newy, 'id': myid
         } 
-        socket.emit('update', m);
+        socket.emit('update', emit_message);
       }
+
+      // msg is the location of all components
       socket.on('update', function(msg) {
-        myGamePiece1.x = msg.x;
-        myGamePiece1.y = msg.y;
-        myGamePiece1.update();
+	myGameArea.clear();
+	myGamePieceBackground.update();
+
+        var i;
+	for (i = 0; i < msg.length(); i++) {
+	  //if (i == myid) continue;
+	  var ctx = myGameArea.context;
+	  ctx.fillStyle = "red";
+          ctx.fillRect(msg[i].x, msg[i].y, 30, 30);
+	}
       });
 
 
