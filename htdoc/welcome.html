@@ -21,10 +21,20 @@ button:hover {
 }
 
 </style>
-<body>
+<body onload="displayuser()">
+<script>
+function displayuser() {
+  var query = "" + window.location.search;
+  var start_loc = query.search("=");
+  start_loc++;
+  var username = query.slice(start_loc);
+  document.getElementById("username").innerHTML = username;
+//  console.log(window.location.search);
+}
 
+</script>
 <h1>Welcome!</h1>
-<h2>aaa@aaa.com</h2>
+<h2 id= username></h2>
 <img src="player1.jpeg" alt="player1">
   <br><br><label for="userlevel"><b>User Level: 999</b></label>
   <br><br><label for="skill"><b>Skill: AA</b></label>

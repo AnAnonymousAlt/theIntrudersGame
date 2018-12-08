@@ -2,8 +2,47 @@
 <html>
 <body>
 
-<canvas id="myCanvas" width="700" height="500" style="border:1px solid #d3d3d3;">
-Your browser does not support the HTML5 canvas tag.</canvas>
+      socket.on('accept', function(msg) {
+        myid = msg;
+      });
+      // inital drawComponent and start myGameArea (canvas)
+      function startGame() {
+        myGameArea.start();
+	myGamePiece1 = new drawComponent(30,30,"red",10,120);
+	boss = new picComponent("boss.jpeg", 50,50, 120, 220);
+	socket.emit("gamestart", myGamePiece1);
+	// myGamePiece1 = new drawComponent(30,30,"red",10,120);
+	// myGamePieceBackground = new drawComponent(300,220,"grey",130,50);
+      }
+      // main object
+      var myGameArea = {
+        canvas : document.createElement("canvas"),
+        start : function() {
+          this.canvas.width = canvasWidth;
+          this.canvas.height = canvasHeight;
+          this.context = this.canvas.getContext("2d");
+          document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+	  // load background img
+	  bg_img = new Image();
+	  var tempcontext = this.context;
+	  bg_img.onload = function() {
+	    tempcontext.drawImage(bg_img,0,0,480, 480);
+	  }
+	  bg_img.src = "background.jpeg";
+          this.interval = setInterval(updateGameArea, 20);
+          window.addEventListener('keydown', function (e) {
+            myGameArea.key = e.keyCode;
+          });
+          window.addEventListener('keyup', function (e) {
+            myGameArea.key = false;
+          });
+        },
+        // clear whole canvas
+        clear : function() {
+          this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
+	  this.context.drawImage(bg_img,0,0,480, 480);
+        }
+      }
 
 <script>
 var flag = 0;
@@ -52,5 +91,127 @@ setInterval(drawboss, 20);
 <p><strong>Note:</strong> The canvas tag is not supported in Internet 
 Explorer 8 and earlier versions.</p >
 
-</body>
+
+      function updateGameArea() {
+	if (myid == -1) return;
+        // Clear then update
+        //myGameArea.clear();
+        var oldx = myGamePiece1.x;
+        var oldy = myGamePiece1.y;
+        // Make piece move. 1 px / 20 millisecond towards right
+        // myGamePiece1.x+=1;
+        // Key sroke
+        if (myGameArea.key && myGameArea.key == 32) {
+          stopMove();
+        }
+        if (myGameArea.key && myGameArea.key == 87) {
+          if (myGamePiece1.speedY > 0) {
+            myGamePiece1.speedY -= ts;
+          }
+          else {
+            myGamePiece1.speedY -= av;
+          }
+          if (myGamePiece1.speedY < 0 - sl) {
+            myGamePiece1.speedY = 0 - sl;
+          }
+        }
+        if (myGameArea.key && myGameArea.key == 83) {
+          if (myGamePiece1.speedY < 0) {
+            myGamePiece1.speedY += ts;
+          }
+          else myGamePiece1.speedY += av;
+          if (myGamePiece1.speedY > sl) {
+            myGamePiece1.speedY = sl
+          }
+        }
+        if (myGameArea.key && myGameArea.key == 65) {
+          if (myGamePiece1.speedX > 0) {
+            myGamePiece1.speedX -= ts;
+          }
+          else {
+            myGamePiece1.speedX -= av;
+          }
+          if (myGamePiece1.speedX < 0 - sl) {
+            myGamePiece1.speedX = 0 - sl;
+          }
+        }
+        if (myGameArea.key && myGameArea.key == 68) {
+          if (myGamePiece1.speedX < 0) {
+            myGamePiece1.speedX += ts;
+          }
+          else {
+            myGamePiece1.speedX += av;
+          }
+          if (myGamePiece1.speedX > sl) {
+            myGamePiece1.speedX = sl;
+          }
+        }
+
+        // update
+        // myGamePieceBackground.update();
+        myGamePiece1.newPos();
+        var newx = myGamePiece1.x;
+        var newy = myGamePiece1.y;
+	/*
+        myGamePiece1.x = oldx;
+        myGamePiece1.y = oldy;
+	*/
+        //myGamePiece1.update();
+        
+        var emit_message = {
+          'x': newx, 'y': newy, 'id': myid
+        } 
+        socket.emit('update', emit_message);
+      }
+      var turn = 0;
+      // msg is the location of all drawComponents
+      socket.on('update', function(msg) {
+	myGameArea.clear();
+	// myGamePieceBackground.update();
+	if (turn == 0) boss.x = boss.x+2;
+	else boss.x = boss.x - 2;
+	if (boss.x > 325) turn = 1;
+	else if (boss.x < 120) turn = 0;
+	boss.update();
+        var i;
+	for (i = 0; i < msg.length; i++) {
+	  //if (i == myid) continue;
+	  var ctx = myGameArea.context;
+	  ctx.fillStyle = "red";
+          if (myid == i) ctx.fillStyle = "blue";
+          ctx.fillRect(msg[i].x, msg[i].y, 30, 30);
+	}
+	var x_d = Math.abs(msg[myid].x - boss.x);
+	var y_d = Math.abs(msg[myid].y - boss.y);
+	if (((x_d < 50 && msg[myid].x > boss.x) || (x_d < 30 && msg[myid].x < boss.x )) 
+	  && ((y_d < 50 && msg[myid].y > boss.y) || (y_d < 30 && msg[myid].y < boss.y))) {
+	    socket.emit('win');
+	    socket.disconnect();
+	    alert("You win!");
+	}
+      });
+      socket.on('lose', function(msg) {
+	socket.disconnet();
+	alert("You loss!");
+      });
+      function moveUp() {
+        myGamePiece1.speedY -= 1;
+      }
+      function moveDown() {
+        myGamePiece1.speedY += 1;
+      }
+      function moveLeft() {
+        myGamePiece1.speedX -= 1;
+      }
+      function moveRight() {
+        myGamePiece1.speedX += 1;
+      }
+      function stopMove() {
+        myGamePiece1.speedX = 0;
+        myGamePiece1.speedY = 0;
+      }
+    </script>
+    <p> Move to the boss to win!</p>
+  </body>
+
 </html>
