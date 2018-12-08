@@ -3,8 +3,9 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var url = require('url');
 
-http.listen(3000, function() {
-  console.log('Server running on port 3000 (localhost)');
+http.listen(80, function() {
+  console.log('Server running on port 80 (www.theintrudersgame.com)');
+//  console.log('Server running on port 3000 (localhost)');
 });
 
 
