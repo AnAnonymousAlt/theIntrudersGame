@@ -1,0 +1,87 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/homes/li2185/.nvm/v0.10.32/bin/node',
+1 verbose cli   '/homes/li2185/.nvm/v0.10.32/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'node-v11.2.0' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.32
+4 verbose node symlink /homes/li2185/.nvm/v0.10.32/bin/node
+5 verbose readDependencies using package.json deps
+6 verbose cache add [ 'node-v11.2.0', null ]
+7 verbose cache add name=undefined spec="node-v11.2.0" args=["node-v11.2.0",null]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: 'node-v11.2.0',
+8 verbose parsed url   path: 'node-v11.2.0',
+8 verbose parsed url   href: 'node-v11.2.0' }
+9 silly lockFile 39f84659-node-v11-2-0 node-v11.2.0
+10 verbose lock node-v11.2.0 /homes/li2185/.npm/39f84659-node-v11-2-0.lock
+11 silly lockFile 39f84659-node-v11-2-0 node-v11.2.0
+12 silly lockFile 39f84659-node-v11-2-0 node-v11.2.0
+13 verbose addNamed [ 'node-v11.2.0', '' ]
+14 verbose addNamed [ null, '*' ]
+15 silly lockFile 4b02563d-node-v11-2-0 node-v11.2.0@
+16 verbose lock node-v11.2.0@ /homes/li2185/.npm/4b02563d-node-v11-2-0.lock
+17 silly addNameRange { name: 'node-v11.2.0', range: '*', hasData: false }
+18 verbose request where is /node-v11.2.0
+19 verbose request registry https://registry.npmjs.org/
+20 verbose request id 93fa5d8ec9139e34
+21 verbose url raw /node-v11.2.0
+22 verbose url resolving [ 'https://registry.npmjs.org/', './node-v11.2.0' ]
+23 verbose url resolved https://registry.npmjs.org/node-v11.2.0
+24 verbose request where is https://registry.npmjs.org/node-v11.2.0
+25 info trying registry request attempt 1 at 09:59:49
+26 http GET https://registry.npmjs.org/node-v11.2.0
+27 http 404 https://registry.npmjs.org/node-v11.2.0
+28 verbose headers { date: 'Wed, 05 Dec 2018 14:59:49 GMT',
+28 verbose headers   'content-type': 'application/json',
+28 verbose headers   'content-length': '21',
+28 verbose headers   connection: 'keep-alive',
+28 verbose headers   'set-cookie': [ '__cfduid=d6123f03dff76a4d27338b85336cb71a21544021989; expires=Thu, 05-Dec-19 14:59:49 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+28 verbose headers   'cf-cache-status': 'MISS',
+28 verbose headers   'cache-control': 'max-age=300',
+28 verbose headers   'cf-ray': '484760f7efd0a615-IND',
+28 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+28 verbose headers   vary: 'accept-encoding, accept',
+28 verbose headers   server: 'cloudflare' }
+29 silly registry.get cb [ 404,
+29 silly registry.get   { date: 'Wed, 05 Dec 2018 14:59:49 GMT',
+29 silly registry.get     'content-type': 'application/json',
+29 silly registry.get     'content-length': '21',
+29 silly registry.get     connection: 'keep-alive',
+29 silly registry.get     'set-cookie': [ '__cfduid=d6123f03dff76a4d27338b85336cb71a21544021989; expires=Thu, 05-Dec-19 14:59:49 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+29 silly registry.get     'cf-cache-status': 'MISS',
+29 silly registry.get     'cache-control': 'max-age=300',
+29 silly registry.get     'cf-ray': '484760f7efd0a615-IND',
+29 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+29 silly registry.get     vary: 'accept-encoding, accept',
+29 silly registry.get     server: 'cloudflare' } ]
+30 silly lockFile 4b02563d-node-v11-2-0 node-v11.2.0@
+31 silly lockFile 4b02563d-node-v11-2-0 node-v11.2.0@
+32 error Error: Not found : node-v11.2.0
+32 error     at RegClient.<anonymous> (/home/u88/li2185/.nvm/v0.10.32/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:308:14)
+32 error     at Request._callback (/home/u88/li2185/.nvm/v0.10.32/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:246:65)
+32 error     at Request.self.callback (/home/u88/li2185/.nvm/v0.10.32/lib/node_modules/npm/node_modules/request/request.js:236:22)
+32 error     at Request.emit (events.js:98:17)
+32 error     at Request.<anonymous> (/home/u88/li2185/.nvm/v0.10.32/lib/node_modules/npm/node_modules/request/request.js:1142:14)
+32 error     at Request.emit (events.js:117:20)
+32 error     at IncomingMessage.<anonymous> (/home/u88/li2185/.nvm/v0.10.32/lib/node_modules/npm/node_modules/request/request.js:1096:12)
+32 error     at IncomingMessage.emit (events.js:117:20)
+32 error     at _stream_readable.js:943:16
+32 error     at process._tickCallback (node.js:419:13)
+33 error If you need help, you may report this *entire* log,
+33 error including the npm and node versions, at:
+33 error     <http://github.com/npm/npm/issues>
+34 error System Linux 4.15.0-30-generic
+35 error command "/homes/li2185/.nvm/v0.10.32/bin/node" "/homes/li2185/.nvm/v0.10.32/bin/npm" "install" "node-v11.2.0"
+36 error cwd /home/u88/li2185/cs252/theIntrudersGame/theIntrudersGameTest/testnode/testDeploy
+37 error node -v v0.10.32
+38 error npm -v 1.4.28
+39 verbose exit [ 1, true ]
