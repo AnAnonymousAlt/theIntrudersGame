@@ -118,7 +118,7 @@ io.sockets.on('connection', function(socket) {
   socket.on('request', function(msg) {
     console.log('An user sent a request');
     counter++;
-    socket.emit('accept', counter);
+    socket.emit('accept', 0);
     console.log('new userid: ' + counter);
     uc.push(0);
   });
