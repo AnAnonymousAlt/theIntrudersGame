@@ -77,27 +77,30 @@ span.psw {
   <script>
     function clicklogin(){
       var loginmsg = {
-	'username': document.getElementById("uname").value, 'password': document.getElementById("psw").value
+	'username': document.getElementById("uname").value,
+        'password': document.getElementById("psw").value
       }
       socket.emit("login", loginmsg);
-      window.
       socket.on("aok", function(){
-	window.open("welcome.html","_self");
+        var target = "welcome.html?user=" + document.getElementById("uname").value;
+	window.open(target,"_self");
       });
       socket.on("abad", function(){
 	alert("Rewrite!");
       });
     }
     function clickregister(){
-    var registermsg = {
-            'username': document.getElementById("uname").value, 'password': document.getElementById("psw").value
-	          }
+      var registermsg = {
+        'username': document.getElementById("uname").value, 
+        'password': document.getElementById("psw").value
+      }
       socket.emit("register", registermsg);
       socket.on("aok",function(){
-	window.open("welcome.html","_self");
+        var target = "welcome.html?user=" + document.getElementById("uname").value;
+        window.open(target,"_self");
       });
       socket.on("abad",function(){
-	alert("Rewrite!");
+        alert("Rewrite!");
       });
     }
   </script>

@@ -37,12 +37,14 @@ app.get('/', function(req, res) {
         } else {
           try {
             // console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
-             var t = JSON.stringify(data, null, 2);
-             console.log(t);
-             var result = JSON.parse(t);
-    
-            var txt = "" + result["Item"]["password"] +"";
-            if (txt == "asdf") { console.log("nice"); socket.emit('aok');}
+            var t = JSON.stringify(data, null, 2);
+            console.log(t);
+            var result = JSON.parse(t);
+            var txt = result["Item"]["password"] +"";
+            var pwd_t = pwd +"";
+            if (txt == pwd_t) { 
+              console.log("nice"); 
+              socket.emit('aok');}
             else socket.emit('abad');
             } catch (error) {
               socket.emit('abad');
