@@ -163,6 +163,6 @@ io.sockets.on('connection', function(socket) {
     console.log('user disconnected');
   });
 });
-http.listen(80, function() {
-    console.log('Server running on port 80(http)');
+http.listen(3000, function() {
+    console.log('Server running on port 3000 (localhost)');
 });
