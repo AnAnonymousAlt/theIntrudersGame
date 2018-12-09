@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -7,7 +6,7 @@
   <body>
     <div style="position: relative;">
       <canvas id="gamearea_background" width="480" height="360"
-        style="border: 1px solid #d3ded3; background-color: #fddd33; position: absolute; left:0; top: 0; z-index: 0;"></canvas>
+        style="position: absolute; left:0; top: 0; z-index: 0;"></canvas>
       <canvas id="ga_ft" width="480" height="360" 
         style="position: absolute; left:0; top: 0; z-index: 0;"></canvas>
     </div>
@@ -15,10 +14,9 @@
     <script>
       window.onload = function() {
         var background = document.getElementById("gamearea_background");
-        var ctx = background.getContext("2d");
-        var bg_img = new Image();
-        bg_img.src = "/pic/bg0.jpg";
-        ctx.drawImage(bg_img, 0, 0, 480, 360);
+        var ctx = canvas.getContext("2d");
+        var img = new Image();
+        img.src = "background.jpeg"
       };
     </script>
   </body>
