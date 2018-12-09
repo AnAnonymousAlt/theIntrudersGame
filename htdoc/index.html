@@ -16,6 +16,18 @@
       var socket = io();
     </script>
     <script>
+	    function uuid() {
+  var uuid = "", i, random;
+  for (i = 0; i < 32; i++) {
+    random = Math.random() * 16 | 0;
+
+    if (i == 8 || i == 12 || i == 16 || i == 20) {
+      uuid += "-"
+    }
+    uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
+  }
+  return uuid;
+}
       var canvasWidth = 480;
       var canvasHeight = 480;
       var myGamePiece1; // myGP1
@@ -37,7 +49,8 @@
         myGameArea.start();
 	myGamePiece1 = new drawComponent(30,30,"red",10,120);
 	boss = new picComponent("boss.jpeg", 50,50, 120, 220);
-	socket.emit("gamestart", myGamePiece1);
+	   var uuidv1s = uuid() + "";
+	socket.emit("gamestart", uuidv1s);
 	// myGamePiece1 = new drawComponent(30,30,"red",10,120);
 	// myGamePieceBackground = new drawComponent(300,220,"grey",130,50);
       }

@@ -3,8 +3,8 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var url = require('url');
 
-http.listen(3000, function() {
-  console.log('Server running on port 3000 (localhost)');
+http.listen(80, function() {
+  console.log('Server running on port 80 (HTTP)');
 });
 
 
@@ -115,42 +115,75 @@ app.get('/player2.jpeg', function(req, res) {
 app.get('/boss.jpeg', function(req, res) {
   res.sendFile(__dirname + '/boss.jpeg');
 });
-
+  var cc = 0; // connection counter
+  var counter = 0;
+  var array = [];
+  var uc = [0,0]; // recorder each update info
+  var ucc = 0; // counter for updating
+  var id = [];
+  var adr = [];
 app.get('/index.html', function(req, res) {
   
   res.sendFile(__dirname + '/index.html');
 
   console.log(__dirname);
-  var counter = -1;
+/*  var counter = -1;
   var array = [];
   var uc = []; // update counter
   var ucc = -1;
-  
+  */
   io.sockets.on('connection', function(socket) {
-    console.log(socket.handshake.address);
-    const u = url.parse(socket.handshake.url);
-    console.log("pathname: " + u.pathname);
+/*	 var cadr = socket.handshake.address+"";
+	  console.log(cadr);
+	  console.log(cc);
+	if (cc == 0) {
+		adr.push(cadr);
+		cc++;
+	}
+	else if (cc == 1) {
+		if(adr[0] == cadr) {
+			socket.disconnect();
+			return;
+		}
+		else {
+			adr.push(cadr);
+			cc++;
+		}
+	}
+	else {
+		socket.disconnection();
+		return;
+	}
+   */ const u = url.parse(socket.handshake.url);
+    //console.log("pathname: " + u.pathname);
     console.log('An user connected.');
 
     socket.on('gamestart', function(msg) {
-      console.log('An user sent a request.  counter = ' + counter);
-      counter++;
+	var msgs = msg + "";
+	console.log(msgs);
+      if (counter == 2) {socket.disconnect(); return;}
+	if (counter == 1) { if (id[0] == msgs) {socket.disconnect();return;}}
+      
+      id.push(msgs);
       socket.emit('accept', counter);
       console.log('new userid: ' + counter);
-      uc.push(0);
+      counter++;	
     });
   
     socket.on('update', function(msg) {
       //console.log('x: ' + msg.x + '\t\t\ty: ' + msg.y + '\t\t\tid: ' + msg.id);
+     /* 
       console.log('msg: ' + msg.x + ' ' + msg.y + ' '  + msg.id);
       console.log('uc: ' + uc);
       console.log('ucc: ' + ucc);
       console.log('counter: ' + counter);
+      */
       if (uc[msg.id] == 0) {
         array.push(msg);
         uc[msg.id] = 1;
-        ucc = ucc + 1;
+        ucc++;
       }
+	/*    
       console.log('');
       console.log('msg: ' + msg.x + ' ' + msg.y + ' '  + msg.id);
   
@@ -159,9 +192,10 @@ app.get('/index.html', function(req, res) {
       console.log('counter: ' + counter);
   
       console.log('-------------');
-      if (ucc == counter && ucc != -1) {
-        console.log('array: ' + array[0].x + ' ' + array[0].y + ' ' + array[0].id);
-        if (counter >= 1) console.log('\t' +array[1].x + array[1].y + array[1].id);
+      */
+      if (ucc == counter && ucc != 0) {
+        //console.log('array: ' + array[0].x + ' ' + array[0].y + ' ' + array[0].id);
+        //if (counter >= 1) console.log('\t' +array[1].x + array[1].y + array[1].id);
         io.emit('update', array);
         var i = 0;
         while (i <= counter) {
@@ -169,7 +203,7 @@ app.get('/index.html', function(req, res) {
           i++;
         }
         array = [];
-        ucc = -1;
+        ucc = 0;
       }
     });
     socket.on('win', function() {
@@ -178,10 +212,12 @@ app.get('/index.html', function(req, res) {
     socket.on('disconnect', function() {
       counter--;
       console.log('user disconnected');
-      if(counter == -1)
-        uc = [];
+	    cc--;
+      if(counter == 0)
+        uc = [0, 0];
         array = [];
-        ucc = -1;
+        ucc = 0;
+	   
     });
     
   });
