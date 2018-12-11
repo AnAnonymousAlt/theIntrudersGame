@@ -1,6 +1,6 @@
-all:	git-commit	run
+all:	push	run
 
-git-commit:
+push:
 	git add .
 	git commit -m 'frame'
 	git push
