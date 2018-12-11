@@ -32,7 +32,7 @@ button:hover {
 rgsbtn {
   background-color: #f44336;
   color: white; 
-  padding: 14px 100px;
+  padding: 10px 135px;
   margin: 8px 0;
   border: none;
   cursor: pointer;
@@ -107,20 +107,21 @@ span.psw {
       });
     }
   </script>
+
 <h2>Login Form</h2>
 
   <div class="container">
     <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username"id="uname" name="uname" required>
+    <input type="text" placeholder="Enter Username" name="uname" required>
 
     <br><label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" id="psw" name="psw" required>
+    <input type="password" placeholder="Enter Password" name="psw" required>
         
-    <br> <button type="button"onclick="clicklogin()">Login</button>
+    <br> <button type="button"onclick="window.location.href='welcome.html'">Login</button>
     <label>
       <input type="checkbox" checked="checked" name="remember"> Remember me
     </label>
-    <br ><rgsbtn type="button"onclick="clickregister()">Register</rgsbtn>
+    <br ><rgsbtn type="button"onclick="window.location.href='welcome.html'">Register</rgsbtn>
     
   </div>
 
