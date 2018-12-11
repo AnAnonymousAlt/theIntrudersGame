@@ -1,47 +1,192 @@
 <!DOCTYPE html>
+
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<style>
-canvas {
-  border:1px solid #d3d3d3;
-  background-color: #f1f1f1;
-}
-</style>
-</head>
-<body onload="startGame()">
-<script>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+  <body>
+    <div style="position: relative;">
+      <h2>GAME</h2>
+      <canvas id="gamearea_background" width="480" height="360"
+        style="position: absolute; left:400; top: 200; z-index: 0;"></canvas>
+      <canvas id="player_layer" width="480" height="360"
+        style="position: absolute; left:400; top: 200; z-index: 2;"></canvas>
+      <canvas id="enemy_layer" width="480" height="360"
+        style="position: absolute; left:400; top: 200; z-index: 1;"></canvas>
+    </div>
+      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><h3>How to play</h3>
+      <h4>"You are blue. Your goal is to touch red boss before anyone.</h4>
+      <h4> WSAD to move, Space to stop</h4>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 
-var myGamePiece;
+    <script>
+      var socket = io("/game");
+      window.onload = function() {
+        gameStart();
+      };
+      var myid = -1;
+      function gameStart() {
+        socket.emit("gamestart");
+        socket.on("approve", function(msg){
+          myid = msg;
+          console.log(myid);
+        });
+        game.load();
+      }
+      var game = {
+        background_canvas : document.getElementById("gamearea_background"),
+        player_canvas : document.getElementById("player_layer"),
+        enemy_canvas : document.getElementById("enemy_layer"),
+        interval : 17,
+        keys : new Array(200).fill(0),
 
-function startGame() {
-  myGameArea.start();
-  myGamePiece = new component(30, 30, "red", 10, 120);
-}
-var myGameArea = {
-  canvas : document.createElement("canvas"),
-  start : function() {
-    this.canvas.width = 480;
-    this.canvas.height = 270;
-    this.context = this.canvas.getContext("2d");
-        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-  }
-}
-function component(width, height, color, x, y) {
-  this.width = width;
-  this.height = height;
-  this.x = x;
-  this.y = y;
-  ctx = myGameArea.context;
-  ctx.fillStyle = color;
-  ctx.fillRect(this.x, this.y, this.width, this.height);
-}
+        load: function() {
+          game.background_context = game.background_canvas.getContext("2d");
+          game.player_context = game.player_canvas.getContext("2d");
+          game.enemy_context = game.enemy_canvas.getContext("2d");
+          game.player = drawComponent(10,10,50,50,"blue");
+          
+          var bg_img = new Image();
+          bg_img.onload = function() {
+            game.background_context.drawImage(bg_img, 0, 0, 480, 360);
+          }
+          bg_img.src = "/pic/background.jpeg";
+          
+          game.interval = window.setInterval(updateGame, game.interval);
+          $( document ).ready(function() {
+          document.addEventListener("keydown", function (e) {
+            game.keys = (game.keys || []);
+            game.keys[e.keyCode] = 1;
+            if (e.keyCode == 87) game.keys[83] = 0;
+            if (e.keyCode == 83) game.keys[87] = 0;
+            if (e.keyCode == 65) game.keys[68] = 0;
+            if (e.keyCode == 68) game.keys[65] = 0;
+            // console.log("down" + e.keyCode + "game.key[] == " + game.keys[e.keyCode]);
+          });
+          document.addEventListener("keyup", function (e) {
+            game.keys[e.keyCode] = 0;
+            // console.log("up" + e.keyCode + "game.key[] == " + game.keys[e.keyCode]);
+          });
+          });
+        },
+        clear_player : function() {
+          // console.log("clear");
+          this.player_context.clearRect(0,0, 480, 360);
+        },
+        clear_enemy : function() {
+          this.enemy_context.clearRect(0,0,480, 360);
+        }
+      }
 
-</script>
+      function drawComponent(x, y, width, height, color) {
+        this.width = width;
+        this.height = height;
+        this.x = x;
+        this.y = y;
+        this.color = color;
 
-<p>We have added a component to our game, a red square!</p>
+        this.speedX = 0;
+        this.speedY = 0;
+        this.acceleration = 0.3;
+        this.move = function() {
+          if (game.keys && game.keys[87]) {
+            this.speedY = this.speedY - this.acceleration;
+          }
+          if (game.keys && game.keys[83]) {
+            this.speedY = this.speedY + this.acceleration;
+          }
+          if (game.keys && game.keys[65]) {
+            this.speedX = this.speedX - this.acceleration;
+          }
+          if (game.keys && game.keys[68]) {
+            this.speedX = this.speedX + this.acceleration;
+          }
+          if (this.speedY > 2) {
+            this.speedY = 2;
+          }
+          if (this.speedY < -2) {
+            this.speedY = -2;
+          }
+          if (this.speedX > 2) {
+            this.speedX = 2;
+          }
+          if (this.speedX < -2) {
+            this.speedX = -2;
+          }
+          if (game.keys && game.keys[32]) {
+            this.speedX = 0;
+            this.speedY = 0;
+          }
+        }
+        this.updatePos = function() {
+          // console.log("pos");
+          this.x += this.speedX;
+          this.y += this.speedY;
+          if (this.x + this.width > 480) {
+            this.x = 480 - this.width;
+            this.speedX = 0;
+          }
+          if (this.x < 0) {
+            this.x = 0;
+            this.speedX = 0;
+          }
+          if (this.y + this.height > 360) {
+            this.y = 360 - this.height;
+            this.speedY = 0;
+          }
+          if (this.y < 0) {
+            this.y = 0;
+            this.speedY = 0;
+          }
+        }
 
-</body>
+        this.draw = function() {
+          // console.log("draw");
+          game.player_context.fillStyle = color;
+          game.player_context.fillRect(this.x, this.y, this.width, this.height);
+        }
+        return this;
+      }
+
+      function updateGame() {
+        // console.log("update");
+        var update_message = {
+          id : myid,
+          x : game.player.x,
+          y : game.player.y
+        };
+        socket.emit("update_client", update_message);
+        game.clear_player();
+        game.player.move();
+        game.player.updatePos();
+        game.player.draw();
+      }
+      socket.on("update_server", function(msg) {
+        game.clear_enemy();
+        game.enemy_context.fillStyle = msg.boss_color;
+        game.enemy_context.fillRect(msg.boss_x, msg.boss_y, msg.boss_width, msg.boss_height);
+        if (msg.number_player > 1) {
+          game.enemy_context.fillStyle = "green";
+          var i;
+          for (i = 0; i < msg.number_player; i++) {
+            if (i == myid) continue;
+            game.enemy_context.fillRect(msg.player_array[i].x, msg.player_array[i].y, 50, 50);
+          }
+        }
+      });
+
+      socket.on("win", function() {
+        alert("YOU WIN!");
+        socket.close();
+        clearInterval(game.interval);
+      });
+
+      socket.on("lose", function(msg) {
+        alert("YOU LOSE! " + msg + " WIN!");
+        socket.close();
+        clearInterval(game.interval);
+      });
+    </script>
+  </body>
 </html>
-
-
