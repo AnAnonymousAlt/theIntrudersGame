@@ -170,7 +170,7 @@
           game.enemy_context.fillStyle = "green";
           var i;
           for (i = 0; i < msg.number_player; i++) {
-            if (i == myid) continue;
+            if (msg.player_array[i].id == myid) continue;
             game.enemy_context.fillRect(msg.player_array[i].x, msg.player_array[i].y, 50, 50);
           }
         }

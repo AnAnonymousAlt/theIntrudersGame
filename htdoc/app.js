@@ -165,7 +165,7 @@ game_socket.on("connection", function(socket) {
   socket.on("update_client", function(msg) {
     //console.log("update");
     if (update_counter < player_counter) {
-      update_array[msg.id] = msg;
+      update_array.push(msg);
       update_counter++;
       if ((msg.x <= boss.x + boss.width && msg.x + 50 >= boss.x)
            && (msg.y <= boss.y + boss.height && msg.y + 50 >= boss.y)) {
