@@ -1,8 +1,8 @@
 all:	push	run
 
 push:
-	git add .
-	git commit -m 'frame'
+	git add ../.
+	git commit -m 'htdoc'
 	git push
 
 run:
