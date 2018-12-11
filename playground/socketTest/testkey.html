@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2 id="sb">THIS IS H@</h2>
+    <script>
+      document.addEventListener('keydown', function(e) {
+        document.getElementById("sb").innerHTML = e.keyCode + " down";  
+      });
+      document.addEventListener("keyup", function(e) {
+        document.getElementById("sb").innerHTML = e.keyCode + " up";
+      });
+      
+    </script>
+  <body>
+</html>
