@@ -4,8 +4,8 @@ var server = require("http").Server(app);
 var io = require("socket.io")(server);
 var url = require("url");
 
-server.listen(3000, function() {
-  console.log("server running on port 3000");
+server.listen(80, function() {
+  console.log("server running on port 80");
 });
 
 app.get("/", function(req, res) {

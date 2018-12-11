@@ -72,10 +72,8 @@ span.psw {
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
   <script>
-    var socket = io("/login");
-  </script>
-  <script>
     function clicklogin(){
+      var socket = io("/login");
       var loginmsg = {
 	'username': document.getElementById("uname").value,
         'password': document.getElementById("psw").value
@@ -83,13 +81,16 @@ span.psw {
       socket.emit("login", loginmsg);
       socket.on("aok", function(){
         var target = "welcome.html?user=" + document.getElementById("uname").value;
+        socket.close();
 	window.open(target,"_self");
       });
       socket.on("abad", function(){
 	alert("Rewrite!");
+        socket.close();
       });
     }
     function clickregister(){
+      var socket = io("/login");
       var registermsg = {
         'username': document.getElementById("uname").value, 
         'password': document.getElementById("psw").value
@@ -97,9 +98,11 @@ span.psw {
       socket.emit("register", registermsg);
       socket.on("aok",function(){
         var target = "welcome.html?user=" + document.getElementById("uname").value;
+        socket.close();
         window.open(target,"_self");
       });
       socket.on("abad",function(){
+        socket.close();
         alert("Rewrite!");
       });
     }
