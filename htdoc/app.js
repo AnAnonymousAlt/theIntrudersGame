@@ -3,6 +3,7 @@ var app = express();
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
 var url = require("url");
+var path = require("path");
 
 
 server.listen(80, function() {
@@ -13,16 +14,8 @@ app.get("/", function(req, res) {
   res.sendFile(__dirname + "/login.html");
 });
 
-app.get("/game.html", function(req, res) {
-  res.sendFile(__dirname + "/game.html");
-});
-
-app.get('/welcome.html', function(req, res) {
-  res.sendFile(__dirname + '/welcome.html');
-});
-
-app.get('/rooms.html', function(req, res) {
-  res.sendFile(__dirname + '/rooms.html');
+app.get("/*.html", function(req, res) {
+  res.sendFile(path.join(__dirname, req.paras[0]));
 });
 
 app.get("/pic/\*", function(req,res) {
